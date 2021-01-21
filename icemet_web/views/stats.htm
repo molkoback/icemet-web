@@ -1,0 +1,28 @@
+{% extends "layout.htm" %}
+
+{% set title = "ICEMET Statistics" %}
+
+{% block links %}
+<link href="{{ url_for('static', filename='css/daterangepicker.css') }}"
+      rel="stylesheet">
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/moment.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/Chart.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/daterangepicker.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/stats.js') }}"></script>
+<script>
+$(window).on("load", function() {
+	stats_init("{{ url_for('stats_api_route', database=database, table=table) }}");
+});
+</script>
+{% endblock %}
+
+{% block content %}
+{% include 'loading.htm' %}
+<p>DateTime: <input id="input-datetime" type="text" style="width:20%"></input></p>
+<div id="div-stats">
+	<canvas id="canvas-lwcmvd"></canvas>
+</div>
+{% endblock %}

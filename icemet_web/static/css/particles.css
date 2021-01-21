@@ -1,0 +1,50 @@
+.filt {
+	color: #292929;
+	border: 1px solid #cccccc;
+	background-color: #f0f0f0;
+	font-family: "Roboto Mono", monospace;
+	font-size: small;
+}
+
+.table, th, td {
+	border: 0;
+}
+
+.table {
+	width: 100%;
+	border-collapse: collapse;
+	font-family: inherit;
+}
+
+.table tr:nth-child(even) {
+	background-color: #f0f0f0;
+}
+
+.table th {
+	padding: 4px;
+	background-color: #008afe;
+	color: #fff;
+	text-align: center;
+	font-weight: normal;
+}
+
+.table td {
+	text-align: center;
+}
+
+.table a {
+	color: #fff;
+	text-decoration: none;
+}
+
+.table img {
+	width: 95%;
+	image-rendering: optimizeSpeed;
+	image-rendering: -moz-crisp-edges;
+	image-rendering: -o-crisp-edges;
+	image-rendering: -webkit-optimize-contrast;
+	image-rendering: optimize-contrast;
+	image-rendering: crisp-edges;
+	image-rendering: pixelated;
+	-ms-interpolation-mode: nearest-neighbor;
+}

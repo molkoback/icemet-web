@@ -1,0 +1,36 @@
+{% extends "particles.htm" %}
+
+{% block scripts %}
+{{ super() }}
+<script src="{{ url_for('static', filename='js/viewer.js') }}"></script>
+<script>
+$(window).on("load", function() {
+	viewer_init("{{ url_for('particles_images_api_route', database=database, table=table) }}");
+});
+</script>
+{% endblock %}
+
+{% block particles_content %}
+{% include 'loading.htm' %}
+<div id="div-viewer">
+	<p style="text-align:center">
+		<a class="a-prev" href="javascript:void(0)">&lt;</a> <span class="span-page"></span> <a class="a-next" href="javascript:void(0)">&gt;</a>
+	</p>
+	<table id="table-particles" class="table">
+	<tr>
+		<th style="width: 5%;"><a id="a-id" href="javascript:void(0)">ID</a></th>
+		<th style="width: 10%"><a id="a-datetime" href="javascript:void(0)">DateTime</a></th>
+		<th style="width: 15%">Particle</th>
+		<th style="width: 15%">Threshold</th>
+		<th style="width: 15%">Preview</th>
+		<th style="width: 10%"><a id="a-diam" href="javascript:void(0)">EquivDiam (μm)</a></th>
+		<th style="width: 10%"><a id="a-z" href="javascript:void(0)">Z (mm)</a></th>
+		<th style="width: 10%"><a id="a-circ" href="javascript:void(0)">HeywoodCircFact</a></th>
+		<th style="width: 10%"><a id="a-dnr" href="javascript:void(0)">DynamicRange</a></th>
+	</tr>
+	</table>
+	<p style="text-align:center">
+		<a class="a-prev" href="javascript:void(0)">&lt;</a> <span class="span-page"></span> <a class="a-next" href="javascript:void(0)">&gt;</a>
+	</p>
+</div>
+{% endblock %}

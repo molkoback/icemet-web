@@ -1,0 +1,36 @@
+{% extends "layout.htm" %}
+
+{% set title = "ICEMET Help" %}
+
+{% block content %}
+<h1>Help</h1>
+<h2>Database Fields</h2>
+<h3>Particles</h3>
+<ul>
+<li><code>ID</code>: Database entry ID.</li>
+<li><code>DateTime</code>: Date and time of the measurement.</li>
+<li><code>Sensor</code>: Sensor ID.</li>
+<li><code>Frame</code>: Image frame number.</li>
+<li><code>X</code>, <code>Y</code>, <code>Z</code>: Particle centroid coordinates in the image (m).</li>
+<li><code>EquivDiam</code>: Equivalent Diameter (m).</li>
+<li><code>EquivDiamCorr</code>: Used Equivalent Diameter correction factor.</li>
+<li><code>Circularity</code>: Heywood Circularity Factor. Lower = more circular.</li>
+<li><code>DynRange</code>: Dynamic range of the particle image.</li>
+<li><code>EffPxSz</code>: Effective pixel size of the particle image (m/px).</li>
+<li><code>SubX</code>, <code>SubY</code>, <code>SubW</code>, <code>SubH</code>: Particle segment rectangle in the Preview image (px).</li>
+</ul>
+<h3>Statistics</h3>
+<ul>
+<li><code>ID</code>: Database entry ID.</li>
+<li><code>DateTime</code>: Date and time of the measurement.</li>
+<li><code>LWC</code>: Liquid Water Content (g/m<sup>3</sup>).</li>
+<li><code>MVD</code>: Median Volume Diameter (m).</li>
+<li><code>Conc</code>: Particle concentration (#/m<sup>3</sup>).</li>
+<li><code>Frames</code>: Number of images used in the measurement.</li>
+<li><code>Particles</code>: Total number of particles found.</li>
+</ul>
+
+<h2>About</h2>
+<p>ICEMET project is developed in the University of Oulu. See <a href="https://www.oulu.fi/icemet/">www.oulu.fi/icemet</a> for more information.</p>
+<p>Copyright &copy; 2019-2021 <a href="mailto:eero.molkoselka@gmail.com">Eero Molkoselkä</a></p>
+{% endblock %}
