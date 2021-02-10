@@ -3,16 +3,11 @@
 
 SECRET_KEY: ""
 
-BASIC_AUTH_USERNAME: "icemet"
-BASIC_AUTH_PASSWORD: ""
-
 SQL_HOST: "localhost"
 SQL_PORT: 3306
-SQL_USER: "root"
-SQL_PASSWORD: ""
+SQL_WEBSITE: "https://localhost/phpmyadmin"
 
 ICEMET_RESULTS_PATH: "~/.icemet/results"
-
 ICEMET_FILTERS: {
 "default": ""
 }

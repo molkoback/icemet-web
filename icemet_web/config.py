@@ -1,4 +1,5 @@
-from icemet_web import app, datadir, homedir
+from icemet_web import datadir, homedir
+from icemet_web.app import app
 
 import os
 import shutil

@@ -1,4 +1,4 @@
-from icemet_web import app
+from icemet_web.app import app
 
 def main():
 	app.run("localhost", port=5000)

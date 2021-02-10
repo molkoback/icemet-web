@@ -1,4 +1,4 @@
-from icemet_web import app
+from icemet_web.app import app
 from icemet_web.db import database_inst, stats_databases
 from icemet_web.util import render, api
 
