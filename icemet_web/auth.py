@@ -1,5 +1,5 @@
 from icemet_web.app import app
-from icemet_web.db import database_inst
+from icemet_web.models.database import database_inst
 
 import flask
 from flask_basicauth import BasicAuth
@@ -15,7 +15,7 @@ class ICEMETAuth(BasicAuth):
 			if not flask.session.get("LOGGED_IN", False):
 				if self.authenticate():
 					flask.session["LOGGED_IN"] = True
-					return flask.redirect(flask.url_for("index"))
+					return flask.redirect(flask.url_for("index_route"))
 				else:
 					return self.challenge()
 	

@@ -25,7 +25,7 @@
 	</head>
 	<body>
 		 <div class="navbar">
-			<a href="{{ url_for('index') }}">Home</a>
+			<a href="{{ url_for('index_route') }}">Home</a>
 			<div class="dropdown">
 				<button class="dropbtn">Images <div class="arrow-down"></div></button>
 				<div class="dropdown-content">
@@ -73,9 +73,10 @@
 					</div>
 				</div>
 			</div>
-			<a href="{{ url_for('icemet_database') }}" target="_blank">Database</a>
-			<a href="{{ url_for('icemet_help') }}">Help</a>
-			<a href="{{ url_for('icemet_logout') }}">Logout</a>
+			<a href="{{ url_for('database_route') }}" target="_blank">Database</a>
+			<a href="{{ url_for('status_route') }}">Status</a>
+			<a href="{{ url_for('help_route') }}">Help</a>
+			<a href="{{ url_for('logout_route') }}">Logout</a>
 		</div>
 		<div id="content">
 			{% block content %}

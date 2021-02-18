@@ -1,4 +1,4 @@
-from icemet_web.db import particles_databases, stats_databases
+from icemet_web.models.database import particles_databases, stats_databases
 
 import flask
 

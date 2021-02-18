@@ -37,6 +37,15 @@ input {
 	font-size: small;
 }
 
+table {
+	padding: 10px;
+}
+
+th, td {
+	text-align: left;
+	padding: 5px;
+}
+
 .navbar {
 	overflow: hidden;
 	background-color: #008afe;

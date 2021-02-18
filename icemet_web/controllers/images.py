@@ -1,5 +1,5 @@
 from icemet_web.app import app
-from icemet_web.db import database_inst, particles_databases
+from icemet_web.models.database import database_inst, particles_databases
 from icemet_web.util import image_extensions, render, api, sql_filt_valid
 
 from icemet.db import ParticlesRow
