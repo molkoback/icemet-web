@@ -12,10 +12,9 @@ def stats_api_route(database, table):
 	if not database in databases or not table in databases[database]:
 		return api(error="Invalid database or table")
 	
-	dt_start = flask.request.form.get("dt_start"),
+	dt_start = flask.request.form.get("dt_start")
 	dt_end = flask.request.form.get("dt_end")
-	
-	if not dt_start is None and dt_end is None:
+	if dt_start and dt_end:
 		try:
 			datetime.strptime(dt_start, "%Y-%m-%d %H:%M")
 			datetime.strptime(dt_end, "%Y-%m-%d %H:%M")
