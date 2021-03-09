@@ -49,6 +49,7 @@ th, td {
 .navbar {
 	overflow: hidden;
 	background-color: #008afe;
+	white-space: nowrap;
 }
 
 .navbar a {
@@ -59,12 +60,7 @@ th, td {
 	text-decoration: none;
 }
 
-.dropdown {
-	float: left;
-	overflow: hidden;
-}
-
-.dropdown .dropbtn {
+.navbar button {
 	border: none;
 	outline: none;
 	color: #fff;
@@ -72,49 +68,56 @@ th, td {
 	background-color: inherit;
 	font: inherit;
 	margin: 0;
+	cursor: pointer;
 }
 
-.navbar a:hover, .dropdown:hover .dropbtn {
+.navbar a:hover, .navbar button:hover {
 	background-color: #004e90;
+}
+
+.dropdown {
+	float: left;
+	overflow: hidden;
 }
 
 .dropdown-content {
 	display: none;
 	position: absolute;
 	background-color: #f0f0f0;
-	width: 100%;
-	left: 0;
-	z-index: 1;
+	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 }
 
-.dropdown:hover .dropdown-content {
-	display: block;
-}
-
-.column {
-	float: left;
-	width: auto;
-	padding: 0.5%;
-	background-color: #fff;
-	height: auto;
-}
-
-.column a {
-	float: none;
+.dropdown-content a {
 	color: #292929;
-	text-decoration: none;
+	float: none;
+	padding: 14px 16px;
 	display: block;
 	text-align: left;
 }
 
-.column a:hover {
-	background-color: #f0f0f0;
+.dropdown-content button {
+	color: #292929;
+	float: none;
+	padding: 14px 16px;
+	display: block;
+	text-align: left;
 }
 
-.row:after {
-	content: "";
-	display: table;
-	clear: both;
+.dropdown-content a:hover, .dropdown-content button:hover {
+	background-color: #fff;
+}
+
+.dropdown-submenu {
+	overflow: hidden;
+}
+
+.dropdown-submenu-content {
+	display: none;
+	position: absolute;
+	left: 100%;
+	top: 0;
+	background-color: #f0f0f0;
+	box-shadow: 0px 4px 16px 0px rgba(0,0,0,0.2);
 }
 
 #loading {
@@ -143,11 +146,23 @@ th, td {
 }
 
 .arrow-down {
+	border: solid;
+	border-width: 0 3px 3px 0;
 	display: inline-block;
-	width: 0;
-	height: 0;
-	border-left: 5px solid transparent;
-	border-right: 5px solid transparent;
-	border-top: 5px solid #fff;
-	padding-bottom: 3px;
+	padding: 3px;
+	margin-left: 1px;
+	margin-bottom: 2px;
+	transform: rotate(45deg);
+	-webkit-transform: rotate(45deg);
+}
+
+.arrow-right {
+	border: solid;
+	border-width: 0 3px 3px 0;
+	display: inline-block;
+	padding: 3px;
+	margin-left: 1px;
+	margin-bottom: 2px;
+	transform: rotate(-45deg);
+	-webkit-transform: rotate(-45deg);
 }
