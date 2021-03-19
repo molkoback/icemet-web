@@ -10,13 +10,14 @@ import time
 def status_api_route():
 	form = flask.request.form
 	try:
+		type = form["type"]
 		id = int(form["id"])
-		name = form["name"]
+		location = form.get("location", "")
 		time_ = float(form["time"])
 	except:
 		return api(error="Invalid parameters")
 	
-	status_container_inst().write(Status(id, name, time_))
+	status_container_inst().write(Status(type, id, location, time_))
 	return api({"delay": time.time()-time_})
 
 @app.route("/status/", methods=["GET"])

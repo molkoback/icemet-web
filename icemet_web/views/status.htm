@@ -8,7 +8,7 @@
 <table style="width:50%">
 <tr><th style="width: 15%">Status</th><th style="width: 60%">Sensor</th><th style="width: 25%">Last message (min)</th></tr>
 {% for status in statuses %}
-	<tr><td>{% if status.status() %}<span style="color:green">ONLINE{% else %}<span style="color:red">OFFLINE{% endif %}</span></td><td>{{ status.name }} ({{ "{:02X}".format(status.id) }})</td><td>{{ status.delta()//60 }}</td></tr>
+	<tr><td>{% if status.status() %}<span style="color:green">ONLINE{% else %}<span style="color:red">OFFLINE{% endif %}</span></td><td>{{ "{}-{:02X} {}".format(status.type, status.id, status.location) }}</td><td>{{ status.delta()//60 }}</td></tr>
 {% endfor %}
 {% else %}
 <p>No status messages.</p>
