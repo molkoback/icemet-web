@@ -166,3 +166,11 @@ th, td {
 	transform: rotate(-45deg);
 	-webkit-transform: rotate(-45deg);
 }
+
+.filt {
+	color: #292929;
+	border: 1px solid #cccccc;
+	background-color: #f0f0f0;
+	font-family: "Roboto Mono", monospace;
+	font-size: small;
+}

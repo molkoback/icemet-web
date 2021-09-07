@@ -9,6 +9,10 @@ SQL_WEBSITE: "https://localhost/phpmyadmin"
 
 ICEMET_RESULTS_PATH: "~/.icemet/results"
 ICEMET_STATUS_FILE: ":memory:"
-ICEMET_FILTERS: {
+ICEMET_PARTICLES_FILTERS: {
 "default": ""
+}
+ICEMET_ICING_LIMITS: {
+0.0: "inherit",
+100.0: "#ff0000"
 }

@@ -1,18 +1,20 @@
-{% extends "particles.htm" %}
+{% extends "layout.htm" %}
+
+{% set title = "Histograms" %}
 
 {% block scripts %}
-{{ super() }}
 <script src="{{ url_for('static', filename='js/moment.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/Chart.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/histograms.js') }}"></script>
 <script>
-$(window).on("load", function() {
-	histograms_init("{{ url_for('particles_hist_api_route', database=database, table=table) }}");
+$(window).on("load", () => {
+	const histograms = new ParticleHistograms(api);
 });
 </script>
 {% endblock %}
 
-{% block particles_content %}
+{% block content %}
+{% include 'filter.htm' %}
 {% include 'loading.htm' %}
 <div id="div-histograms" style="display:none">
 	<p style="text-align:center"><a id="a-linear" href="javascript:void(0)">Linear</a> / <a id="a-log" href="javascript:void(0)">Log</a></p>

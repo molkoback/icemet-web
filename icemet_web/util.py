@@ -15,6 +15,10 @@ def api(obj={}, error=None):
 	obj["error"] = error
 	return flask.jsonify(obj)
 
+def api(error=None, **kwargs):
+	kwargs["error"] = error
+	return flask.jsonify(kwargs)
+
 def sql_filt_valid(filt):
 	legal = string.ascii_uppercase + string.ascii_lowercase + string.digits + " .'\"()!=<>-:"
 	for c in filt:

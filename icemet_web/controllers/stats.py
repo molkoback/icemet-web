@@ -19,23 +19,23 @@ def stats_api_route(database, table):
 			datetime.strptime(dt_start, "%Y-%m-%d %H:%M")
 			datetime.strptime(dt_end, "%Y-%m-%d %H:%M")
 		except:
-			return api("Invalid datetime format")
+			return api(error="Invalid datetime format")
 		filt = " WHERE DateTime >= '{}' and DateTime <= '{}'".format(dt_start, dt_end)
 	else:
 		filt = ""
 	
 	sql = "SELECT DateTime, LWC, MVD FROM `{}`.`{}`{} ORDER BY DateTime ASC;".format(database, table, filt)
 	try:
-		rows = database_inst().select(sql)
+		rows = [*database_inst().select(sql)]
 	except:
 		return api(error="SQL error")
 	
 	stats = {"time": [], "lwc": [], "mvd": []}
 	for row in rows:
-		stats["time"].append(row["DateTime"].strftime("%Y-%m-%d %H:%M"))
+		stats["time"].append(row["DateTime"].strftime("%Y-%m-%d %H:%M:%S"))
 		stats["lwc"].append(row["LWC"])
 		stats["mvd"].append(row["MVD"])
-	return api({"stats": stats})
+	return api(stats=stats)
 
 @app.route("/stats/<string:database>/<string:table>/", methods=["GET"])
 def stats_route(database, table):

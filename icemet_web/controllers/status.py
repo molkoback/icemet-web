@@ -18,7 +18,7 @@ def status_api_route():
 		return api(error="Invalid parameters")
 	
 	status_container_inst().write(Status(type, id, location, time_))
-	return api({"delay": time.time()-time_})
+	return api(delay=time.time()-time_)
 
 @app.route("/status/", methods=["GET"])
 def status_route():

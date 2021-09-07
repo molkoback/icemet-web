@@ -2,7 +2,7 @@
 
 <html lang="en">
 	<head>
-		<title>{{ title }}</title>
+		<title>ICEMET - {{ title }}</title>
 		<meta http-equiv="content-type" 
 		      content="text/html; charset=UTF-8" />
 		
@@ -13,7 +13,7 @@
 		      rel="stylesheet">
 		<link href="{{ url_for('static', filename='css/RobotoMono.css') }}"
 		      rel="stylesheet">
-		<link href="{{ url_for('static', filename='css/style.css') }}"
+		<link href="{{ url_for('static', filename='css/layout.css') }}"
 		      rel="stylesheet">
 		{% block links %}
 		{% endblock %}
@@ -21,8 +21,9 @@
 		<script src="{{ url_for('static', filename='js/jquery-3.5.1.min.js') }}"></script>
 		<script src="{{ url_for('static', filename='js/icemet.js') }}"></script>
 		<script>
-			$(window).on("load", function() {
-				icemet_init();
+			const api = new API("{{ url_for('index_route') }}", "{{ database }}", "{{ table }}", handleError);
+			$(window).on("load", () => {
+				icemetInit();
 			});
 		</script>
 		{% block scripts %}
@@ -73,6 +74,22 @@
 							<div class="dropdown-submenu-content">
 								{% for table in tables %}
 									<a href="{{ url_for('stats_route', database=database, table=table) }}">{{ database }} &bull; {{ table }}</a>
+								{% endfor %}
+							</div>
+						</div>
+					{% endfor %}
+				</div>
+			</div>
+			
+			<div class="dropdown">
+				<button>Icing <span class="arrow-down"></span></button>
+				<div class="dropdown-content">
+					{% for database, tables in stats_databases.items() %}
+						<div class="dropdown-submenu">
+							<button>{{ database }} <span class="arrow-right"></span></button>
+							<div class="dropdown-submenu-content">
+								{% for table in tables %}
+									<a href="{{ url_for('icing_route', database=database, table=table) }}">{{ database }} &bull; {{ table }}</a>
 								{% endfor %}
 							</div>
 						</div>

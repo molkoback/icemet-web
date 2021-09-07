@@ -1,22 +1,29 @@
-{% extends "particles.htm" %}
+{% extends "layout.htm" %}
 
+{% set title = "Images" %}
+
+{% block links %}
+<link href="{{ url_for('static', filename='css/images.css') }}"
+      rel="stylesheet"
+      type="text/css" />
+{% endblock %}
 {% block scripts %}
-{{ super() }}
 <script src="{{ url_for('static', filename='js/viewer.js') }}"></script>
 <script>
-$(window).on("load", function() {
-	viewer_init("{{ url_for('particles_images_api_route', database=database, table=table) }}");
+$(window).on("load", () => {
+	const viewer = new ParticleViewer(api);
 });
 </script>
 {% endblock %}
 
-{% block particles_content %}
+{% block content %}
+{% include 'filter.htm' %}
 {% include 'loading.htm' %}
 <div id="div-viewer">
 	<p style="text-align:center">
 		<a class="a-prev" href="javascript:void(0)">&lt;</a> <span class="span-page"></span> <a class="a-next" href="javascript:void(0)">&gt;</a>
 	</p>
-	<table id="table-particles" class="table">
+	<table id="table-particles">
 	<tr>
 		<th style="width: 5%;"><a id="a-id" href="javascript:void(0)">ID</a></th>
 		<th style="width: 10%"><a id="a-datetime" href="javascript:void(0)">DateTime</a></th>

@@ -1,0 +1,14 @@
+<p>
+	<select id="select-filter">
+	{% for k, v in config['ICEMET_PARTICLES_FILTERS'].items() %}
+		<option value="{{ v }}">{{ k }}</option>
+	{% endfor %}
+	</select>
+	<input id="input-filter" class="filter" type="text" value="{{ config['ICEMET_PARTICLES_FILTERS'].get('default', '') }}" style="width:80%"><br>
+	Fields: <code>ID</code>, <code>DateTime</code>, <code>Sensor</code>, <code>Frame</code>, <code>Particle</code>, <code>X</code>, <code>Y</code>, <code>Z</code>, <code>EquivDiam</code>, <code>EquivDiamCorr</code>, <code>Circularity</code>, <code>DynRange</code>, <code>EffPxSz</code>, <code>SubX</code>, <code>SubY</code>, <code>SubW</code>, <code>SubH</code>
+</p>
+<script>
+	$("#select-filter").change(() => {
+		$("#input-filter").val($("#select-filter").val());
+	});
+</script>

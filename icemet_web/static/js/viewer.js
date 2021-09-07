@@ -1,30 +1,50 @@
 "use strict";
 
-var ParticleViewer = function(url) {
-	this.url = url;
-	this.perpage = 50;
-	this.page = 0;
-	this.orderKey = "id";
-	this.order = "ASC";
-	this.filt = "";
-	
-	this.setPage = function(page) {
-		if (page < 0)
-			this.spage = 0;
-		else
-			this.page = page;
+class ParticleViewer {
+	constructor(api) {
+		this.api = api;
+		this.perpage = 50;
+		this.page = 0;
+		this.orderKey = "id";
+		this.order = "ASC";
+		this.filt = $("#input-filter").val();
+		
+		$("#a-id").click(() => { this.switchOrderKey("ID"); });
+		$("#a-datetime").click(() => { this.switchOrderKey("DateTime"); });
+		$("#a-diam").click(() => { this.switchOrderKey("EquivDiam"); });
+		$("#a-z").click(() => { this.switchOrderKey("Z"); });
+		$("#a-circ").click(() => { this.switchOrderKey("Circularity"); });
+		$("#a-dnr").click(() => { this.switchOrderKey("DynRange"); });
+		$(".a-prev").each((_, elem) => {
+			$(elem).click(() => { this.pagePrev(); });
+		});
+		$(".a-next").each((_, elem) => {
+			$(elem).click(() => { this.pageNext(); });
+		});
+		$("#input-filter").keyup((event) => {
+			if (event.which == 13) {
+				this.filt = $("#input-filter").val();
+				this.update();
+			}
+		});
+		
 		this.update();
-	};
+	}
 	
-	this.pagePrev = function() {
+	setPage(page) {
+		this.page = page < 0 ? 0 : page;
+		this.update();
+	}
+	
+	pagePrev() {
 		this.setPage(this.page-1);
-	};
+	}
 	
-	this.pageNext = function() {
+	pageNext() {
 		this.setPage(this.page+1);
-	};
+	}
 	
-	this.switchOrderKey = function(key) {
+	switchOrderKey(key) {
 		if (this.orderKey == key) {
 			this.order = this.order == "ASC" ? "DESC" : "ASC";
 		}
@@ -34,81 +54,43 @@ var ParticleViewer = function(url) {
 		}
 		this.page = 0;
 		this.update();
-	};
+	}
 	
-	this.updateTable = function(json) {
-		var particles = json.particles;
-		$("#table-particles").find("tr:gt(0)").remove();
-		for (var i in particles) {
-			var id = "<td >" + particles[i].id + "</td>";
-			var dt = "<td>" + particles[i].datetime + "</td>";
-			var img = "<td style=\"text-align:center\"><a href=\"" + particles[i].img + "\" target=\"_blank\"><img src=\"" + particles[i].img + "\"\></a></td>";
-			var imgTh = "<td style=\"text-align:center\"><a href=\"" + particles[i].imgth + "\" target=\"_blank\"><img src=\"" + particles[i].imgth + "\"\></a></td>";
-			var imgPrev = "<td style=\"text-align:center\"><a href=\"" + particles[i].imgprev + "\"  target=\"_blank\"><img src=\"" + particles[i].imgprev + "\"\></a></td>";
-			var diam = "<td>" + parseInt(particles[i].diam*1000000.0)  + "</td>";
-			var z = "<td>" + (particles[i].z*1000.0).toFixed(3) + "</td>";
-			var circ = "<td>" + particles[i].circ.toFixed(2) + "</td>";
-			var dr = "<td>" + particles[i].dynrange + "</td>";
-			var row = "<tr>" + id + dt + img + imgTh + imgPrev + diam + z + circ + dr + "</tr>";
-			$("#table-particles tr:last").after(row);
-		}
-		$(".span-page").each(function() {
-			$(this).html(json.page+1);
-		});
-	};
+	particleViewerRow(par) {
+		const row = $("<tr/>");
+		row.append($("<td/>").html(par.id));
+		row.append($("<td/>").html(par.datetime));
+		row.append($("<td/>").html($("<a/>", {href: par.img, target: "_blank"}).css("text-align", "center").html("<img src=\""+par.img+"\"\>")));
+		row.append($("<td/>").html($("<a/>", {href: par.imgth, target: "_blank"}).css("text-align", "center").html("<img src=\""+par.imgth+"\"\>")));
+		row.append($("<td/>").html($("<a/>", {href: par.imgprev, target: "_blank"}).css("text-align", "center").html("<img src=\""+par.imgprev+"\"\>")));
+		row.append($("<td/>").html(parseInt(par.diam*1000000.0)));
+		row.append($("<td/>").html((par.z*1000.0).toFixed(3)));
+		row.append($("<td/>").html(par.circ.toFixed(2)));
+		row.append($("<td/>").html(par.dynrange));
+		return row;
+	}
 	
-	this.update = function() {
+	update() {
 		$("#div-viewer").hide();
 		$("#loading").show();
-		var self = this;
-		$.post({
-			url: this.url,
-			data: {
-				perpage: self.perpage,
-				page: self.page,
-				order_key: self.orderKey,
-				order: self.order,
-				filt: self.filt
-			},
-			dataType: "json"
-		}).done(function(json) {
-			if (json.error) {
-				error(json.error);
-			}
-			else {
-				$("#loading").hide();
-				$("#div-viewer").show();
-				self.updateTable(json);
-			}
-		}).fail(function() {
-			error("Failed POST request");
+		const data = {
+			perpage: this.perpage,
+			page: this.page,
+			order_key: this.orderKey,
+			order: this.order,
+			filt: this.filt
+		};
+		this.api.request("/images", data, (data) => {
+			const table = $("#table-particles");
+			table.find("tr:gt(0)").remove();
+			$.each(data.particles, (i, par) => {
+				table.append(this.particleViewerRow(par));
+			});
+			$(".span-page").each((i, elem) => {
+				$(elem).html(data.page+1);
+			});
+			$("#loading").hide();
+			$("#div-viewer").show();
 		});
-	};
-};
-
-var viewer_init = function(url) {
-	var viewer = new ParticleViewer(url);
-	
-	$("#a-id").click(function() { viewer.switchOrderKey("ID"); });
-	$("#a-datetime").click(function() { viewer.switchOrderKey("DateTime"); });
-	$("#a-diam").click(function() { viewer.switchOrderKey("EquivDiam"); });
-	$("#a-z").click(function() { viewer.switchOrderKey("Z"); });
-	$("#a-circ").click(function() { viewer.switchOrderKey("Circularity"); });
-	$("#a-dnr").click(function() { viewer.switchOrderKey("DynRange"); });
-	$(".a-prev").each(function() {
-		$(this).click(function() { viewer.pagePrev(); });
-	});
-	$(".a-next").each(function() {
-		$(this).click(function() { viewer.pageNext(); });
-	});
-	
-	$("#input-filt").keyup(function(event) {
-		if (event.which == 13) {
-			viewer.filt = $("#input-filt").val();
-			viewer.update();
-		}
-	});
-	viewer.filt = $("#input-filt").val();
-	
-	viewer.update();
+	}
 };

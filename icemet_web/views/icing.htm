@@ -1,0 +1,36 @@
+{% extends "layout.htm" %}
+
+{% set title = "Icing" %}
+
+{% block links %}
+<link href="{{ url_for('static', filename='css/icing.css') }}"
+      rel="stylesheet"
+      type="text/css" />
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/icing.js') }}"></script>
+<script>
+	$(window).on("load", () => {
+		var limits = {};
+		{% for k, v in config['ICEMET_ICING_LIMITS'].items() %}
+			limits[{{ k }}] = "{{ v }}";
+		{% endfor %}
+		const events = new IcingEvents(api, limits);
+	});
+</script>
+{% endblock %}
+
+{% block content %}
+{% include 'loading.htm' %}
+<div id="div-icing">
+	<table id="table-icing">
+	<tr>
+		<th style="width:20%">Start</th>
+		<th style="width:20%">End</th>
+		<th style="width:20%">Duration (min)</th>
+		<th style="width:20%">Ice accretion (g/m)</th>
+		<th style="width:20%">Icing rate (mg/m/s)</th>
+	</tr>
+	</table>
+</div>
+{% endblock %}

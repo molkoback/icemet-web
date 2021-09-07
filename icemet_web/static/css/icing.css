@@ -1,0 +1,21 @@
+#table-icing, th, td {
+	border: 0;
+}
+
+#table-icing {
+	width: 100%;
+	border-collapse: collapse;
+	font-family: inherit;
+}
+
+#table-icing tr:nth-child(even) {
+	background-color: #f0f0f0;
+}
+
+#table-icing th {
+	text-align: center;
+}
+
+#table-icing td {
+	text-align: center;
+}

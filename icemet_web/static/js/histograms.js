@@ -1,19 +1,44 @@
 "use strict";
 
-var ParticleHistograms = function(url) {
-	this.url = url;
-	this.filt = "";
+class ParticleHistograms {
+	constructor(api) {
+		this.api = api;
+		this.filt = $("#input-filter").val();
+		
+		this.maxTicksLimit = 20;
+		this.barColor = "rgba(0, 138, 254, 1.0)";
+		this.gridColor = "rgba(204, 204, 204, 1.0)";
+		this.type = "linear"
+		
+		this.data = null;
+		this.chartDiam = null;
+		this.chartZ = null;
+		
+		$("#a-linear").click(() => {
+			this.type = "linear";
+			this.updateHistograms();
+			$("#a-linear").css("font-weight", "bold");
+			$("#a-log").css("font-weight", "normal");
+		});
+		$("#a-log").click(() => {
+			this.type = "logarithmic";
+			this.updateHistograms();
+			$("#a-linear").css("font-weight", "normal");
+			$("#a-log").css("font-weight", "bold");
+		});
+		$("#a-linear").css("font-weight", "bold");
+		
+		$("#input-filter").keyup((event) => {
+			if (event.which == 13) {
+				this.filt = $("#input-filter").val();
+				this.update();
+			}
+		});
+		
+		this.update();
+	};
 	
-	this.maxTicksLimit = 20;
-	this.barColor = "rgba(0, 138, 254, 1.0)";
-	this.gridColor = "rgba(204, 204, 204, 1.0)";
-	this.type = "linear"
-	
-	this.data = undefined;
-	this.chartDiam = undefined;
-	this.chartZ = undefined;
-	
-	this.updateHistograms = function() {
+	updateHistograms() {
 		if (this.chartDiam)
 			this.chartDiam.destroy();
 		if (this.chartZ)
@@ -74,54 +99,14 @@ var ParticleHistograms = function(url) {
 		});
 	};
 	
-	this.update = function() {
+	update() {
 		$("#div-histograms").hide();
 		$("#loading").show();
-		var self = this;
-		$.post({
-			url: this.url,
-			data: {filt: self.filt},
-			dataType: "json"
-		}).done(function(json) {
-			if (json.error) {
-				error(json.error);
-			}
-			else {
-				$("#loading").hide();
-				$("#div-histograms").show();
-				self.data = json;
-				self.updateHistograms();
-			}
-		}).fail(function() {
-			error("Failed POST request");
+		this.api.request("/hist", {filt: this.filt}, (data) => {
+			this.data = data;
+			this.updateHistograms();
+			$("#loading").hide();
+			$("#div-histograms").show();
 		});
-	};
-};
-
-var histograms_init = function(url) {
-	var hist = new ParticleHistograms(url);
-	
-	$("#a-linear").click(function() {
-		hist.type = "linear";
-		hist.updateHistograms();
-		$("#a-linear").css("font-weight", "bold");
-		$("#a-log").css("font-weight", "normal");
-	});
-	$("#a-log").click(function() {
-		hist.type = "logarithmic";
-		hist.updateHistograms();
-		$("#a-linear").css("font-weight", "normal");
-		$("#a-log").css("font-weight", "bold");
-	});
-	$("#a-linear").css("font-weight", "bold");
-	
-	$("#input-filt").keyup(function(event) {
-		if (event.which == 13) {
-			hist.filt = $("#input-filt").val();
-			hist.update();
-		}
-	});
-	hist.filt = $("#input-filt").val();
-	
-	hist.update();
+	}
 };

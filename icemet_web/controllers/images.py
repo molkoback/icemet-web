@@ -51,7 +51,7 @@ def particles_images_api_route(database, table):
 		perpage, perpage*page
 	)
 	try:
-		rows = database_inst().select(sql, cls=ParticlesRow)
+		rows = [*database_inst().select(sql, cls=ParticlesRow)]
 	except:
 		return api(error="SQL error")
 	
@@ -85,7 +85,7 @@ def particles_images_api_route(database, table):
 			"imgth": file_sub.path(root=root_threshold, ext=ext_res, sep="/"),
 			"imgprev": file.path(root=root_preview, ext=ext_res_lossy, sep="/")
 		})
-	return api({"page": page, "particles": particles})
+	return api(page=page, particles=particles)
 
 @app.route("/images/<string:database>/<string:table>/", methods=["GET"])
 def particles_images_route(database, table):

@@ -19,7 +19,7 @@ def particles_hist_api_route(database, table):
 	
 	sql = "SELECT Z, EquivDiam FROM `{}`.`{}`{};".format(database, table, filt)
 	try:
-		rows = database_inst().select(sql)
+		rows = [*database_inst().select(sql)]
 	except:
 		return api(error="SQL error")
 	
@@ -31,11 +31,9 @@ def particles_hist_api_route(database, table):
 	
 	ND, binsD = np.histogram(D, bins=100)
 	NZ, binsZ = np.histogram(Z, bins=100)
-	return api({
-		"hist": {
-			"diam": {"N": ND.tolist(), "bins": binsD.tolist()},
-			"z": {"N": NZ.tolist(), "bins": binsZ.tolist()}
-		}
+	return api(hist={
+		"diam": {"N": ND.tolist(), "bins": binsD.tolist()},
+		"z": {"N": NZ.tolist(), "bins": binsZ.tolist()}
 	})
 
 @app.route("/hist/<string:database>/<string:table>/", methods=["GET"])

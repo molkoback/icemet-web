@@ -1,6 +1,6 @@
 {% extends "layout.htm" %}
 
-{% set title = "ICEMET Statistics" %}
+{% set title = "Statistics" %}
 
 {% block links %}
 <link href="{{ url_for('static', filename='css/daterangepicker.css') }}"
@@ -13,8 +13,8 @@
 <script src="{{ url_for('static', filename='js/daterangepicker.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/stats.js') }}"></script>
 <script>
-$(window).on("load", function() {
-	stats_init("{{ url_for('stats_api_route', database=database, table=table) }}");
+$(window).on("load", () => {
+	const stats = new StatsChart(api);
 });
 </script>
 {% endblock %}
