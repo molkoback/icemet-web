@@ -4,10 +4,22 @@ class IcingEvents {
 	constructor(api, limits) {
 		this.api = api;
 		this.limits = limits;
+		this.csv = null;
+		
+		$("#a-csv").click((event) => {
+			const data = "data:application/octet-stream;charset=utf-8," + encodeURIComponent(this.csv);
+			event.currentTarget.setAttribute("href", data);
+			event.currentTarget.setAttribute("download", "data.csv");
+		});
+		
 		this.update();
 	}
 	
-	icingEventRow(event) {
+	csvRow(event) {
+		return event.start + "," + event.end + "," + Math.round(event.duration / 60) + "," + event.accretion + "," + event.rate + "\n";
+	}
+	
+	tableRow(event) {
 		let color = "inherit";
 		for (var limit in this.limits) {
 			if (event.accretion >= limit)
@@ -26,10 +38,12 @@ class IcingEvents {
 		$("#div-icing").hide();
 		$("#loading").show();
 		this.api.request("/icing", {}, (data) => {
+			this.csv = "Start,End,Duration,Acrretion,Rate\n";
 			const table = $("#table-icing");
 			table.find("tr:gt(0)").remove();
 			$.each(data.events, (i, event) => {
-				table.append(this.icingEventRow(event));
+				this.csv += this.csvRow(event);
+				table.append(this.tableRow(event));
 			});
 			$("#loading").hide();
 			$("#div-icing").show();
