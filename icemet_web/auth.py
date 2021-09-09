@@ -15,7 +15,9 @@ class ICEMETAuth(BasicAuth):
 			if not flask.session.get("LOGGED_IN", False):
 				if self.authenticate():
 					flask.session["LOGGED_IN"] = True
-					return flask.redirect(flask.url_for("index_route"))
+					if "logout" in str(flask.request.url_rule):
+						return flask.redirect(flask.url_for("index_route"))
+					return None
 				else:
 					return self.challenge()
 	
