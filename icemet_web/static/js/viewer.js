@@ -12,13 +12,13 @@ class ParticleViewer {
 		const columns = ["ID", "DateTime", "EquivDiam", "Z", "Circularity", "DynRange"];
 		for (let i in columns) {
 			const a = "#a-" + columns[i].toLowerCase();
-			$(a).click(() => { this.switchOrderKey(columns[i]); });
+			$(a).click(() => {this.switchOrderKey(columns[i])});
 		}
 		$(".a-prev").each((_, elem) => {
-			$(elem).click(() => { this.pagePrev(); });
+			$(elem).click(() => {this.pagePrev()});
 		});
 		$(".a-next").each((_, elem) => {
-			$(elem).click(() => { this.pageNext(); });
+			$(elem).click(() => {this.pageNext()});
 		});
 		$("#input-filter").keyup((event) => {
 			if (event.which == 13) {
@@ -55,13 +55,50 @@ class ParticleViewer {
 		this.update();
 	}
 	
+	createHilight(img, par) {
+		const canvas = document.createElement("canvas");
+		canvas.width = img.naturalWidth;
+		canvas.height = img.naturalHeight;
+		const ctx = canvas.getContext("2d");
+		ctx.drawImage(img, 0, 0);
+		ctx.beginPath();
+		ctx.lineWidth = "2";
+		ctx.strokeStyle = "#00ff00";
+		ctx.rect(par.SubX, par.SubY, par.SubW, par.SubH);
+		ctx.stroke();
+		return canvas.toDataURL();
+	}
+	
+	openPreview(par) {
+		const createHilight = this.createHilight;
+		const img = new Image();
+		img.onload = function() {
+			const url = createHilight(this, par);
+			window.open(url);
+		}
+		img.src = par.ImgPrev;
+	}
+	
 	particleViewerRow(par) {
 		const row = $("<tr/>");
 		row.append($("<td/>").html(par.ID));
 		row.append($("<td/>").html(par.DateTime));
-		row.append($("<td/>").html($("<a/>", {href: par.Img, target: "_blank"}).css("text-align", "center").html("<img src=\""+par.Img+"\"\>")));
-		row.append($("<td/>").html($("<a/>", {href: par.ImgTh, target: "_blank"}).css("text-align", "center").html("<img src=\""+par.ImgTh+"\"\>")));
-		row.append($("<td/>").html($("<a/>", {href: par.ImgPrev, target: "_blank"}).css("text-align", "center").html("<img src=\""+par.ImgPrev+"\"\>")));
+		row.append($("<td/>").html(
+			$("<a/>", {href: par.Img, target: "_blank"})
+				.html($("<img />", {src: par.Img}))
+				.css("text-align", "center")
+		 ));
+		row.append($("<td/>").html(
+			$("<a/>", {href: par.ImgTh, target: "_blank"})
+				.html($("<img />", {src: par.ImgTh}))
+				.css("text-align", "center")
+		));
+		row.append($("<td/>").html(
+			$("<a/>", {href: "javascript:void(0)"})
+				.html($("<img />", {src: par.ImgPrev}))
+				.click(() => {this.openPreview(par)})
+				.css("text-align", "center")
+		));
 		row.append($("<td/>").html(parseInt(par.EquivDiam*1000000.0)));
 		row.append($("<td/>").html((par.Z*1000.0).toFixed(3)));
 		row.append($("<td/>").html(par.Circularity.toFixed(2)));

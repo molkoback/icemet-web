@@ -70,21 +70,12 @@ def particles_images_api_route(database, table):
 		file = row.file()
 		file.sub = 0
 		file_sub = row.file()
-		particles.append({
-			"ID": row.ID,
-			"DateTime": row.DateTime.strftime("%Y-%m-%d %H:%M:%S"),
-			"X": row.X,
-			"Y": row.Y,
-			"Z": row.Z,
-			"EquivDiam": row.EquivDiam,
-			"EquivDiamCorr": row.EquivDiamCorr,
-			"Circularity": row.Circularity,
-			"DynRange": row.DynRange,
-			"EffPxSz": row.EffPxSz,
-			"Img": file_sub.path(root=root_recon, ext=ext_res, sep="/"),
-			"ImgTh": file_sub.path(root=root_threshold, ext=ext_res, sep="/"),
-			"ImgPrev": file.path(root=root_preview, ext=ext_res_lossy, sep="/")
-		})
+		row_dict = row.__dict__
+		row_dict["DateTime"] = row_dict["DateTime"].strftime("%Y-%m-%d %H:%M:%S")
+		row_dict["Img"] = file_sub.path(root=root_recon, ext=ext_res, sep="/")
+		row_dict["ImgTh"] = file_sub.path(root=root_threshold, ext=ext_res, sep="/")
+		row_dict["ImgPrev"] = file.path(root=root_preview, ext=ext_res_lossy, sep="/")
+		particles.append(row_dict)
 	return api(page=page, particles=particles)
 
 @app.route("/images/<string:database>/<string:table>/", methods=["GET"])
