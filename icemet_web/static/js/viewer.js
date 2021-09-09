@@ -7,7 +7,7 @@ class ParticleViewer {
 		this.page = 0;
 		this.orderKey = "ID";
 		this.order = "ASC";
-		this.filt = $("#input-filter").val();
+		this.filt = null;
 		
 		const columns = ["ID", "DateTime", "EquivDiam", "Z", "Circularity", "DynRange"];
 		for (let i in columns) {
@@ -21,13 +21,20 @@ class ParticleViewer {
 			$(elem).click(() => {this.pageNext()});
 		});
 		$("#input-filter").keyup((event) => {
-			if (event.which == 13) {
-				this.filt = $("#input-filter").val();
-				this.update();
-			}
+			if (event.which == 13)
+				this.update($("#input-filter").val());
+		});
+		$("#a-total").click(() => {
+			$("#span-total").html("...");
+			this.api.request("/hist", {filt: this.filt}, (data) => {
+				let total = 0;
+				for (let i in data.hist.diam.N)
+					total += data.hist.diam.N[i];
+				$("#span-total").html(total);
+			});
 		});
 		
-		this.update();
+		this.update($("#input-filter").val());
 	}
 	
 	setPage(page) {
@@ -106,7 +113,11 @@ class ParticleViewer {
 		return row;
 	}
 	
-	update() {
+	update(filt) {
+		if (filt != undefined && filt != this.filt) {
+			this.filt = filt;
+			$("#span-total").html("?");
+		}
 		$("#div-viewer").hide();
 		$("#loading").show();
 		const data = {
