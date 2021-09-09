@@ -5,6 +5,8 @@ from icemet_web.util import render, api, sql_filt_valid
 import flask
 import numpy as np
 
+import math
+
 @app.route("/api/hist/<string:database>/<string:table>/", methods=["POST"])
 def particles_hist_api_route(database, table):
 	databases = particles_databases()
@@ -29,11 +31,14 @@ def particles_hist_api_route(database, table):
 		D.append(row["EquivDiam"])
 	Z, D = np.array(Z), np.array(D)
 	
-	ND, binsD = np.histogram(D, bins=100)
+	D0 = math.floor(D.min() *1e6 ) / 1e6
+	D1 = math.ceil(D.max() *1e6 ) / 1e6
+	bins = int((D1 - D0) * 1e6)
+	ND, binsD = np.histogram(D, bins=bins, range=(D0, D1))
 	NZ, binsZ = np.histogram(Z, bins=100)
 	return api(hist={
-		"diam": {"N": ND.tolist(), "bins": binsD.tolist()},
-		"z": {"N": NZ.tolist(), "bins": binsZ.tolist()}
+		"diam": {"N": ND.tolist(), "bins": binsD.tolist()[:-1]},
+		"z": {"N": NZ.tolist(), "bins": binsZ.tolist()[:-1]}
 	})
 
 @app.route("/hist/<string:database>/<string:table>/", methods=["GET"])
