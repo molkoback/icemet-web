@@ -71,19 +71,19 @@ def particles_images_api_route(database, table):
 		file.sub = 0
 		file_sub = row.file()
 		particles.append({
-			"id": row.ID,
-			"datetime": row.DateTime.strftime("%Y-%m-%d %H:%M:%S"),
-			"x": row.X,
-			"y": row.Y,
-			"z": row.Z,
-			"diam": row.EquivDiam,
-			"diamcorr": row.EquivDiamCorr,
-			"circ": row.Circularity,
-			"dynrange": row.DynRange,
-			"effpxsz": row.EffPxSz,
-			"img": file_sub.path(root=root_recon, ext=ext_res, sep="/"),
-			"imgth": file_sub.path(root=root_threshold, ext=ext_res, sep="/"),
-			"imgprev": file.path(root=root_preview, ext=ext_res_lossy, sep="/")
+			"ID": row.ID,
+			"DateTime": row.DateTime.strftime("%Y-%m-%d %H:%M:%S"),
+			"X": row.X,
+			"Y": row.Y,
+			"Z": row.Z,
+			"EquivDiam": row.EquivDiam,
+			"EquivDiamCorr": row.EquivDiamCorr,
+			"Circularity": row.Circularity,
+			"DynRange": row.DynRange,
+			"EffPxSz": row.EffPxSz,
+			"Img": file_sub.path(root=root_recon, ext=ext_res, sep="/"),
+			"ImgTh": file_sub.path(root=root_threshold, ext=ext_res, sep="/"),
+			"ImgPrev": file.path(root=root_preview, ext=ext_res_lossy, sep="/")
 		})
 	return api(page=page, particles=particles)
 

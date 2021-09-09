@@ -5,16 +5,15 @@ class ParticleViewer {
 		this.api = api;
 		this.perpage = 50;
 		this.page = 0;
-		this.orderKey = "id";
+		this.orderKey = "ID";
 		this.order = "ASC";
 		this.filt = $("#input-filter").val();
 		
-		$("#a-id").click(() => { this.switchOrderKey("ID"); });
-		$("#a-datetime").click(() => { this.switchOrderKey("DateTime"); });
-		$("#a-diam").click(() => { this.switchOrderKey("EquivDiam"); });
-		$("#a-z").click(() => { this.switchOrderKey("Z"); });
-		$("#a-circ").click(() => { this.switchOrderKey("Circularity"); });
-		$("#a-dnr").click(() => { this.switchOrderKey("DynRange"); });
+		const columns = ["ID", "DateTime", "EquivDiam", "Z", "Circularity", "DynRange"];
+		for (let i in columns) {
+			const a = "#a-" + columns[i].toLowerCase();
+			$(a).click(() => { this.switchOrderKey(columns[i]); });
+		}
 		$(".a-prev").each((_, elem) => {
 			$(elem).click(() => { this.pagePrev(); });
 		});
@@ -58,15 +57,15 @@ class ParticleViewer {
 	
 	particleViewerRow(par) {
 		const row = $("<tr/>");
-		row.append($("<td/>").html(par.id));
-		row.append($("<td/>").html(par.datetime));
-		row.append($("<td/>").html($("<a/>", {href: par.img, target: "_blank"}).css("text-align", "center").html("<img src=\""+par.img+"\"\>")));
-		row.append($("<td/>").html($("<a/>", {href: par.imgth, target: "_blank"}).css("text-align", "center").html("<img src=\""+par.imgth+"\"\>")));
-		row.append($("<td/>").html($("<a/>", {href: par.imgprev, target: "_blank"}).css("text-align", "center").html("<img src=\""+par.imgprev+"\"\>")));
-		row.append($("<td/>").html(parseInt(par.diam*1000000.0)));
-		row.append($("<td/>").html((par.z*1000.0).toFixed(3)));
-		row.append($("<td/>").html(par.circ.toFixed(2)));
-		row.append($("<td/>").html(par.dynrange));
+		row.append($("<td/>").html(par.ID));
+		row.append($("<td/>").html(par.DateTime));
+		row.append($("<td/>").html($("<a/>", {href: par.Img, target: "_blank"}).css("text-align", "center").html("<img src=\""+par.Img+"\"\>")));
+		row.append($("<td/>").html($("<a/>", {href: par.ImgTh, target: "_blank"}).css("text-align", "center").html("<img src=\""+par.ImgTh+"\"\>")));
+		row.append($("<td/>").html($("<a/>", {href: par.ImgPrev, target: "_blank"}).css("text-align", "center").html("<img src=\""+par.ImgPrev+"\"\>")));
+		row.append($("<td/>").html(parseInt(par.EquivDiam*1000000.0)));
+		row.append($("<td/>").html((par.Z*1000.0).toFixed(3)));
+		row.append($("<td/>").html(par.Circularity.toFixed(2)));
+		row.append($("<td/>").html(par.DynRange));
 		return row;
 	}
 	
