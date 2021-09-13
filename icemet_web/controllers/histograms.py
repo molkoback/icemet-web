@@ -25,15 +25,20 @@ def particles_hist_api_route(database, table):
 	except:
 		return api(error="SQL error")
 	
-	Z, D = [], []
+	D, Z = [], []
 	for row in rows:
-		Z.append(row["Z"])
 		D.append(row["EquivDiam"])
-	Z, D = np.array(Z), np.array(D)
+		Z.append(row["Z"])
+	if not Z:
+		return api(hist={
+			"diam": {"N": [], "bins": []},
+			"z": {"N": [], "bins": []}
+		})
+	D, Z = np.array(D), np.array(Z)
 	
-	D0 = math.floor(D.min() *1e6 ) / 1e6
-	D1 = math.ceil(D.max() *1e6 ) / 1e6
-	bins = int((D1 - D0) * 1e6)
+	D0 = math.floor(D.min() * 1e6 ) / 1e6
+	D1 = math.ceil(D.max() * 1e6 ) / 1e6
+	bins = max(1, int((D1 - D0) * 1e6))
 	ND, binsD = np.histogram(D, bins=bins, range=(D0, D1))
 	NZ, binsZ = np.histogram(Z, bins=100)
 	return api(hist={
