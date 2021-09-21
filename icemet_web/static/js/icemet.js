@@ -30,6 +30,37 @@ class API {
 	}
 }
 
+class CSV {
+	constructor() {
+		this.header = null;
+		this.rows = [];
+	}
+	
+	setHeader(labels) {
+		this.header = labels;
+	}
+	
+	addRow(row) {
+		this.rows.push(row);
+	}
+	
+	get() {
+		let data = this.header ? this.header.join(",") + "\n" : "";
+		for (const row of this.rows)
+			data += row.join(",") + "\n";
+		return data;
+	}
+	
+	createDownload(div, name) {
+		name = name ? name : "data.csv";
+		$(div).click((event) => {
+			const data = "data:application/octet-stream;charset=utf-8," + encodeURIComponent(this.get());
+			event.currentTarget.setAttribute("href", data);
+			event.currentTarget.setAttribute("download", name);
+		});
+	}
+}
+
 function handleError(msg) {
 	alert(msg);
 }

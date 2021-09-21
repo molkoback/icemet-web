@@ -30,11 +30,11 @@ def stats_api_route(database, table):
 	except:
 		return api(error="SQL error")
 	
-	stats = {"time": [], "lwc": [], "mvd": []}
+	stats = {"DateTime": [], "LWC": [], "MVD": []}
 	for row in rows:
-		stats["time"].append(row["DateTime"].strftime("%Y-%m-%d %H:%M:%S"))
-		stats["lwc"].append(row["LWC"])
-		stats["mvd"].append(row["MVD"])
+		stats["DateTime"].append(row["DateTime"].strftime("%Y-%m-%d %H:%M:%S"))
+		stats["LWC"].append(row["LWC"])
+		stats["MVD"].append(row["MVD"])
 	return api(stats=stats)
 
 @app.route("/stats/<string:database>/<string:table>/", methods=["GET"])

@@ -16,7 +16,7 @@ class IcingEvents {
 	}
 	
 	csvRow(event) {
-		return event.start + "," + event.end + "," + Math.round(event.duration / 60) + "," + event.accretion + "," + event.rate + "\n";
+		return [event.start, event.end, Math.round(event.duration / 60), event.accretion, event.rate];
 	}
 	
 	tableRow(event) {
@@ -38,15 +38,17 @@ class IcingEvents {
 		$("#div-icing").hide();
 		$("#loading").show();
 		this.api.request("/icing", {}, (data) => {
-			this.csv = "Start,End,Duration,Acrretion,Rate\n";
+			this.csv = new CSV();
+			this.csv.createDownload("#a-csv");
+			this.csv.setHeader(["Start", "End", "Duration", "Accretion", "Rate"]);
 			const table = $("#table-icing");
 			table.find("tr:gt(0)").remove();
 			$.each(data.events, (i, event) => {
-				this.csv += this.csvRow(event);
+				this.csv.addRow(this.csvRow(event));
 				table.append(this.tableRow(event));
 			});
 			$("#loading").hide();
 			$("#div-icing").show();
 		});
 	}
-};
+}

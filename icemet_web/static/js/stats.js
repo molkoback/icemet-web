@@ -12,7 +12,8 @@ class StatsChart {
 		this.lwcColor = "rgba(0, 0, 255, 1.0)";
 		this.mvdColor = "rgba(232, 83, 17, 1.0)";
 		
-		this.chartLWCMVD = null;
+		this.chart = null;
+		this.csv = null;
 		
 		const fmt = "YYYY-MM-DD HH:mm";
 		$("#input-datetime").daterangepicker({
@@ -28,18 +29,18 @@ class StatsChart {
 		this.update();
 	}
 	
-	updateGraphs(data) {
-		if (this.chartLWCMVD)
-			this.chartLWCMVD.destroy();
+	updateChart(stats) {
+		if (this.chart)
+			this.chart.destroy();
 		
-		this.chartLWCMVD = new Chart($("#canvas-lwcmvd")[0].getContext("2d"), {
+		this.chart = new Chart($("#canvas-lwcmvd")[0].getContext("2d"), {
 			type: "line",
 			data: {
-				labels: data.stats.time,
+				labels: stats.DateTime,
 				datasets: [{
 						label: "LWC",
 						yAxisID: "LWC",
-						data: data.stats.lwc.map(x => x.toFixed(3)),
+						data: stats.LWC.map(x => x.toFixed(3)),
 						fill: false,
 						backgroundColor: this.lwcColor,
 						borderColor: "rgba(0, 0, 0, 0)",
@@ -47,7 +48,7 @@ class StatsChart {
 					}, {
 						label: "MVD",
 						yAxisID: "MVD",
-						data: data.stats.mvd.map(x => (x*1000000.0).toFixed(1)),
+						data: stats.MVD.map(x => (x*1000000.0).toFixed(1)),
 						fill: false,
 						backgroundColor: this.mvdColor,
 						borderColor: "rgba(0, 0, 0, 0)",
@@ -81,7 +82,15 @@ class StatsChart {
 				}
 			}
 		});
-	};
+	}
+	
+	updateCsv(stats) {
+		this.csv = new CSV();
+		this.csv.createDownload("#a-csv");
+		this.csv.setHeader(["DateTime", "LWC", "MVD"]);
+		for (let i in stats.DateTime)
+			this.csv.addRow([stats.DateTime[i], stats.LWC[i], stats.MVD[i]]);
+	}
 	
 	update() {
 		$("#div-stats").hide();
@@ -91,7 +100,8 @@ class StatsChart {
 			dt_end: self.dtEnd
 		};
 		this.api.request("/stats", data, (data) => {
-			this.updateGraphs(data);
+			this.updateChart(data.stats);
+			this.updateCsv(data.stats);
 			$("#loading").hide();
 			$("#div-stats").show();
 		});

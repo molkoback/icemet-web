@@ -49,7 +49,7 @@ def icing_api_route(database, table):
 	if not event is None:
 		events.append(event)
 	
-	# Filter, reverse, 2dict
+	# Filter, reverse, to dict
 	events_filt = []
 	for event in events:
 		if event.accretion > 1.0:
