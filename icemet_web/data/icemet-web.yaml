@@ -7,6 +7,7 @@ SQL_HOST: "localhost"
 SQL_PORT: 3306
 SQL_WEBSITE: "https://localhost/phpmyadmin"
 
+ICEMET_WATCH_PATH: "~/.icemet/watch"
 ICEMET_RESULTS_PATH: "~/.icemet/results"
 ICEMET_STATUS_FILE: ":memory:"
 ICEMET_PARTICLES_FILTERS: {
