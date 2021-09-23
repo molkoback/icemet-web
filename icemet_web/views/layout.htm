@@ -82,14 +82,14 @@
 			</div>
 			
 			<div class="dropdown">
-				<button>Icing <span class="arrow-down"></span></button>
+				<button>Events <span class="arrow-down"></span></button>
 				<div class="dropdown-content">
 					{% for database, tables in stats_databases.items() %}
 						<div class="dropdown-submenu">
 							<button>{{ database }} <span class="arrow-right"></span></button>
 							<div class="dropdown-submenu-content">
 								{% for table in tables %}
-									<a href="{{ url_for('icing_route', database=database, table=table) }}">{{ database }} &bull; {{ table }}</a>
+									<a href="{{ url_for('events_route', database=database, table=table) }}">{{ database }} &bull; {{ table }}</a>
 								{% endfor %}
 							</div>
 						</div>

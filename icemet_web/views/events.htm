@@ -5,28 +5,33 @@
 {% block links %}
 <link href="{{ url_for('static', filename='css/daterangepicker.css') }}"
       rel="stylesheet">
-<link href="{{ url_for('static', filename='css/icing.css') }}"
+<link href="{{ url_for('static', filename='css/events.css') }}"
       rel="stylesheet"
       type="text/css" />
 {% endblock %}
 {% block scripts %}
-<script src="{{ url_for('static', filename='js/icing.js') }}"></script>
+<script src="{{ url_for('static', filename='js/moment.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/daterangepicker.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/datetimepicker.js') }}"></script>
+<script src="{{ url_for('static', filename='js/events.js') }}"></script>
 <script>
 	$(window).on("load", () => {
 		var limits = {};
 		{% for k, v in config['ICEMET_ICING_LIMITS'].items() %}
 			limits[{{ k }}] = "{{ v }}";
 		{% endfor %}
-		const events = new IcingEvents(api, limits);
+		const picker = new DateTimePicker();
+		const events = new Events(api, limits, picker);
 	});
 </script>
 {% endblock %}
 
 {% block content %}
 {% include 'loading.htm' %}
-<div id="div-icing" style="display:none">
+<p>DateTime: <input id="input-datetime" type="text" style="width:20%"></input></p>
+<div id="div-events">
 	<p><a id="a-csv" href="javascript:void(0)">CSV</a></p>
-	<table id="table-icing">
+	<table id="table-events">
 	<tr>
 		<th style="width:20%">Start</th>
 		<th style="width:20%">End</th>

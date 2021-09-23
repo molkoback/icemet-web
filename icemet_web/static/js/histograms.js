@@ -5,13 +5,8 @@ class ParticleHistograms {
 		this.api = api;
 		this.filt = $("#input-filter").val();
 		
-		this.maxTicksLimit = 20;
-		this.zColor = "rgba(164, 17, 232, 1.0)";
-		this.diamColor = "rgba(232, 83, 17, 1.0)";
-		this.gridColor = "rgba(204, 204, 204, 1.0)";
 		this.type = "linear"
 		
-		this.data = null;
 		this.chartDiam = null;
 		this.chartZ = null;
 		
@@ -39,11 +34,16 @@ class ParticleHistograms {
 		this.update();
 	}
 	
-	updateHistograms() {
-		if (this.chartDiam)
-			this.chartDiam.destroy();
+	updateHistograms(data) {
 		if (this.chartZ)
 			this.chartZ.destroy();
+		if (this.chartDiam)
+			this.chartDiam.destroy();
+		
+		const maxTicksLimit = 20;
+		const gridColor = "rgba(204, 204, 204, 1.0)";
+		const diamColor = "rgba(230, 82, 17, 1.0)";
+		const zColor = "rgba(128, 9, 9, 1.0)";
 		
 		this.chartDiam = new Chart($("#canvas-diam")[0].getContext("2d"), {
 			type: "bar",
@@ -52,7 +52,7 @@ class ParticleHistograms {
 				datasets: [{
 					yAxisID: "y",
 					data: this.data.hist.diam.N,
-					backgroundColor: new Array(this.data.hist.diam.N.length).fill(this.diamColor)
+					backgroundColor: new Array(this.data.hist.diam.N.length).fill(diamColor)
 				}]
 			},
 			options: {
@@ -64,18 +64,17 @@ class ParticleHistograms {
 					y: {
 						title: {display: true, text: "No. particles"},
 						type: this.type,
-						gridLines: {color: this.gridColor}
+						gridLines: {color: gridColor}
 					},
 					x: {
 						title: {display: true, text: "Equivalent Diameter (μm)"},
-						ticks: {autoSkip: true, maxTicksLimit: this.maxTicksLimit},
-						gridLines: {color: this.gridColor}
+						ticks: {autoSkip: true, maxTicksLimit: maxTicksLimit},
+						gridLines: {color: gridColor}
 					}
 				},
 				animation: false
 			}
 		});
-		
 		this.chartZ = new Chart($("#canvas-z")[0].getContext("2d"), {
 			type: "bar",
 			data: {
@@ -83,7 +82,7 @@ class ParticleHistograms {
 				datasets: [{
 					yAxisID: "y",
 					data: this.data.hist.z.N,
-					backgroundColor: new Array(this.data.hist.z.N.length).fill(this.zColor)
+					backgroundColor: new Array(this.data.hist.z.N.length).fill(zColor)
 				}]
 			},
 			options: {
@@ -95,12 +94,12 @@ class ParticleHistograms {
 					y: {
 						title: {display: true, text: "No. particles"},
 						type: this.type,
-						gridLines: {color: this.gridColor}
+						gridLines: {color: gridColor}
 					},
 					x: {
 						title: {display: true, text: "Particle Z-Position (mm)"},
-						ticks: {autoSkip: true, maxTicksLimit: this.maxTicksLimit},
-						gridLines: {color: this.gridColor}
+						ticks: {autoSkip: true, maxTicksLimit: maxTicksLimit},
+						gridLines: {color: gridColor}
 					}
 				},
 				animation: false

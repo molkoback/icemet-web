@@ -1,15 +1,17 @@
 "use strict";
 
-class IcingEvents {
-	constructor(api, limits) {
+class Events {
+	constructor(api, limits, picker) {
 		this.api = api;
-		this.limits = limits;
-		this.csv = null;
+		this.dtStart = "";
+		this.dtEnd = "";
 		
-		$("#a-csv").click((event) => {
-			const data = "data:application/octet-stream;charset=utf-8," + encodeURIComponent(this.csv);
-			event.currentTarget.setAttribute("href", data);
-			event.currentTarget.setAttribute("download", "data.csv");
+		this.limits = limits;
+		
+		picker.onUpdate((start, end) => {
+			this.dtStart = start;
+			this.dtEnd = end;
+			this.update();
 		});
 		
 		this.update();
@@ -34,26 +36,30 @@ class IcingEvents {
 		return row;
 	}
 	
-	update(data) {
-		$("#div-icing").hide();
+	update() {
+		$("#div-events").hide();
 		$("#loading").show();
-		this.api.request("/icing", {}, (data) => {
+		const data = {
+			dt_start: this.dtStart,
+			dt_end: this.dtEnd
+		};
+		this.api.request("/events", data, (data) => {
 			if (data.events.length === 0) {
-				$("#div-icing").html($("<p>").html("No icing events."));
+				$("#div-events").html($("<p>").html("No icing events."));
 			}
 			else {
-				this.csv = new CSV();
-				this.csv.createDownload("#a-csv");
-				this.csv.setHeader(["Start", "End", "Duration", "Accretion", "Rate"]);
-				const table = $("#table-icing");
+				const csv = new CSV();
+				csv.createDownload("#a-csv");
+				csv.setHeader(["Start", "End", "Duration", "Accretion", "Rate"]);
+				const table = $("#table-events");
 				table.find("tr:gt(0)").remove();
 				$.each(data.events, (i, event) => {
-					this.csv.addRow(this.csvRow(event));
+					csv.addRow(this.csvRow(event));
 					table.append(this.tableRow(event));
 				});
 			}
 			$("#loading").hide();
-			$("#div-icing").show();
+			$("#div-events").show();
 		});
 	}
 }

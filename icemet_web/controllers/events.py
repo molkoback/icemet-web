@@ -1,7 +1,6 @@
 from icemet_web.app import app
 from icemet_web.models.database import database_inst, stats_databases
 from icemet_web.util import render, api
-
 from icemet.db import StatsRow
 from icemet.ice import Cylinder, Event
 
@@ -19,13 +18,25 @@ def event2dict(event):
 		"rate": event.accretion / duration
 	}
 
-@app.route("/api/icing/<string:database>/<string:table>/", methods=["POST"])
-def icing_api_route(database, table):
+@app.route("/api/events/<string:database>/<string:table>/", methods=["POST"])
+def events_api_route(database, table):
 	databases = stats_databases()
 	if not database in databases or not table in databases[database]:
 		return api(error="Invalid database or table")
 	
-	sql = "SELECT * FROM `{}`.`{}` ORDER BY DateTime ASC;".format(database, table)
+	dt_start = flask.request.form.get("dt_start")
+	dt_end = flask.request.form.get("dt_end")
+	if dt_start and dt_end:
+		try:
+			datetime.strptime(dt_start, "%Y-%m-%d %H:%M")
+			datetime.strptime(dt_end, "%Y-%m-%d %H:%M")
+		except:
+			return api(error="Invalid datetime format")
+		filt = " WHERE DateTime >= '{}' and DateTime <= '{}'".format(dt_start, dt_end)
+	else:
+		filt = ""
+	
+	sql = "SELECT * FROM `{}`.`{}`{} ORDER BY DateTime ASC;".format(database, table, filt)
 	try:
 		rows = [*database_inst().select(sql, cls=StatsRow)]
 	except:
@@ -57,9 +68,9 @@ def icing_api_route(database, table):
 	
 	return api(events=events_filt)
 
-@app.route("/icing/<string:database>/<string:table>/", methods=["GET"])
-def icing_route(database, table):
+@app.route("/events/<string:database>/<string:table>/", methods=["GET"])
+def events_route(database, table):
 	databases = stats_databases()
 	if not database in databases or not table in databases[database]:
 		flask.abort(404)
-	return render("icing.htm", database=database, table=table)
+	return render("events.htm", database=database, table=table)
