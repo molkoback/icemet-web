@@ -18,7 +18,7 @@
 		{% block links %}
 		{% endblock %}
 		
-		<script src="{{ url_for('static', filename='js/jquery-3.5.1.min.js') }}"></script>
+		<script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
 		<script src="{{ url_for('static', filename='js/icemet.js') }}"></script>
 		<script>
 			const api = new API("{{ url_for('index_route') }}", "{{ database }}", "{{ table }}", handleError);

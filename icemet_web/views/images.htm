@@ -10,9 +10,9 @@
 {% block scripts %}
 <script src="{{ url_for('static', filename='js/viewer.js') }}"></script>
 <script>
-$(window).on("load", () => {
-	const viewer = new ParticleViewer(api);
-});
+	$(window).on("load", () => {
+		const viewer = new ParticleViewer(api);
+	});
 </script>
 {% endblock %}
 

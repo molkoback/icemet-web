@@ -12,6 +12,7 @@ def stats_api_route(database, table):
 	if not database in databases or not table in databases[database]:
 		return api(error="Invalid database or table")
 	
+	print(flask.request.form)
 	dt_start = flask.request.form.get("dt_start")
 	dt_end = flask.request.form.get("dt_end")
 	if dt_start and dt_end:

@@ -25,12 +25,12 @@ class IcingEvents {
 			if (event.accretion >= limit)
 				color = this.limits[limit];
 		}
-		const row = $("<tr/>");
-		row.append($("<td/>").html(event.start));
-		row.append($("<td/>").html(event.end));
-		row.append($("<td/>").html(Math.round(event.duration / 60)));
-		row.append($("<td/>").html(event.accretion.toFixed(1)).css("color", color));
-		row.append($("<td/>").html((event.rate*1000).toFixed(1)));
+		const row = $("<tr>");
+		row.append($("<td>").html(event.start));
+		row.append($("<td>").html(event.end));
+		row.append($("<td>").html(Math.round(event.duration / 60)));
+		row.append($("<td>").html(event.accretion.toFixed(1)).css("color", color));
+		row.append($("<td>").html((event.rate*1000).toFixed(1)));
 		return row;
 	}
 	
@@ -38,15 +38,20 @@ class IcingEvents {
 		$("#div-icing").hide();
 		$("#loading").show();
 		this.api.request("/icing", {}, (data) => {
-			this.csv = new CSV();
-			this.csv.createDownload("#a-csv");
-			this.csv.setHeader(["Start", "End", "Duration", "Accretion", "Rate"]);
-			const table = $("#table-icing");
-			table.find("tr:gt(0)").remove();
-			$.each(data.events, (i, event) => {
-				this.csv.addRow(this.csvRow(event));
-				table.append(this.tableRow(event));
-			});
+			if (data.events.length === 0) {
+				$("#div-icing").html($("<p>").html("No icing events."));
+			}
+			else {
+				this.csv = new CSV();
+				this.csv.createDownload("#a-csv");
+				this.csv.setHeader(["Start", "End", "Duration", "Accretion", "Rate"]);
+				const table = $("#table-icing");
+				table.find("tr:gt(0)").remove();
+				$.each(data.events, (i, event) => {
+					this.csv.addRow(this.csvRow(event));
+					table.append(this.tableRow(event));
+				});
+			}
 			$("#loading").hide();
 			$("#div-icing").show();
 		});

@@ -3,6 +3,8 @@
 {% set title = "Icing" %}
 
 {% block links %}
+<link href="{{ url_for('static', filename='css/daterangepicker.css') }}"
+      rel="stylesheet">
 <link href="{{ url_for('static', filename='css/icing.css') }}"
       rel="stylesheet"
       type="text/css" />
@@ -22,7 +24,7 @@
 
 {% block content %}
 {% include 'loading.htm' %}
-<div id="div-icing">
+<div id="div-icing" style="display:none">
 	<p><a id="a-csv" href="javascript:void(0)">CSV</a></p>
 	<table id="table-icing">
 	<tr>

@@ -1,7 +1,7 @@
 "use strict";
 
 class StatsChart {
-	constructor(api) {
+	constructor(api, picker) {
 		this.api = api;
 		
 		this.dtStart = "";
@@ -9,22 +9,17 @@ class StatsChart {
 		
 		this.maxTicksLimit = 20;
 		this.gridColor = "rgba(204, 204, 204, 1.0)";
-		this.lwcColor = "rgba(0, 0, 255, 1.0)";
+		this.lwcColor = "rgba(17, 81, 232, 1.0)";
 		this.mvdColor = "rgba(232, 83, 17, 1.0)";
 		
 		this.chart = null;
 		this.csv = null;
 		
-		const fmt = "YYYY-MM-DD HH:mm";
-		$("#input-datetime").daterangepicker({
-			timePicker: true,
-			timePicker24Hour: true,
-			locale: {format: fmt}
-		}, (start, end, label) => {
-			this.dtStart = start.format(fmt);
-			this.dtEnd = end.format(fmt);
+		picker.onUpdate((start, end) => {
+			this.dtStart = start;
+			this.dtEnd = end;
 			this.update();
-		});
+		});;
 		
 		this.update();
 	}
@@ -38,48 +33,50 @@ class StatsChart {
 			data: {
 				labels: stats.DateTime,
 				datasets: [{
-						label: "LWC",
-						yAxisID: "LWC",
-						data: stats.LWC.map(x => x.toFixed(3)),
-						fill: false,
-						backgroundColor: this.lwcColor,
-						borderColor: "rgba(0, 0, 0, 0)",
-						pointBackgroundColor: this.lwcColor
-					}, {
-						label: "MVD",
-						yAxisID: "MVD",
-						data: stats.MVD.map(x => (x*1000000.0).toFixed(1)),
-						fill: false,
-						backgroundColor: this.mvdColor,
-						borderColor: "rgba(0, 0, 0, 0)",
-						pointBackgroundColor: this.mvdColor
+					label: "LWC",
+					yAxisID: "LWC",
+					data: stats.LWC.map(x => x.toFixed(3)),
+					fill: false,
+					backgroundColor: this.lwcColor,
+					borderColor: "rgba(0, 0, 0, 0)",
+					pointBackgroundColor: this.lwcColor
+				}, {
+					label: "MVD",
+					yAxisID: "MVD",
+					data: stats.MVD.map(x => (x*1000000.0).toFixed(1)),
+					fill: false,
+					backgroundColor: this.mvdColor,
+					borderColor: "rgba(0, 0, 0, 0)",
+					pointBackgroundColor: this.mvdColor
 				}]
 			},
 			options: {
-				title: {display: true, text: "LWC and MVD values over time"},
+				plugins: {
+					title: {display: true, text: "LWC and MVD values over time"}
+				},
 				scales: {
-					yAxes: [{
-						id: "LWC",
+					LWC: {
 						type: "linear",
 						position: "left",
-						scaleLabel: {display: true, labelString: "LWC (g/m3)"},
+						title: {display: true, text: "LWC (g/m3)"},
 						ticks: {min: 0},
 						gridLines: {color: "rgba(0, 0, 0, 0)"}
-					}, {
-						id: "MVD",
+					},
+					MVD: {
 						type: "linear",
 						position: "right",
-						scaleLabel: {display: true, labelString: "MVD (μm)"},
+						title: {display: true, text: "MVD (μm)"},
 						ticks: {min: 5, max: 100},
 						gridLines: {color: "rgba(0, 0, 0, 0)"}
-					}],
-					xAxes: [{
+					},
+					x: {
 						type: "time",
 						time: {unit: "hour"},
 						ticks: {autoSkip: true, maxTicksLimit: this.maxTicksLimit},
 						gridLines: {color: this.gridColor}
-					}]
-				}
+					}
+				},
+				animation: false
 			}
 		});
 	}
@@ -96,8 +93,8 @@ class StatsChart {
 		$("#div-stats").hide();
 		$("#loading").show();
 		const data = {
-			dt_start: self.dtStart,
-			dt_end: self.dtEnd
+			dt_start: this.dtStart,
+			dt_end: this.dtEnd
 		};
 		this.api.request("/stats", data, (data) => {
 			this.updateChart(data.stats);
@@ -106,4 +103,4 @@ class StatsChart {
 			$("#div-stats").show();
 		});
 	};
-};
+}

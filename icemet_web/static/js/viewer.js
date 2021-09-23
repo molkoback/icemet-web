@@ -87,29 +87,29 @@ class ParticleViewer {
 	}
 	
 	particleViewerRow(par) {
-		const row = $("<tr/>");
-		row.append($("<td/>").html(par.ID));
-		row.append($("<td/>").html(par.DateTime));
-		row.append($("<td/>").html(
-			$("<a/>", {href: par.Img, target: "_blank"})
-				.html($("<img />", {src: par.Img}))
+		const row = $("<tr>");
+		row.append($("<td>").html(par.ID));
+		row.append($("<td>").html(par.DateTime));
+		row.append($("<td>").html(
+			$("<a>", {href: par.Img, target: "_blank"})
+				.html($("<img >", {src: par.Img}))
 				.css("text-align", "center")
 		 ));
-		row.append($("<td/>").html(
-			$("<a/>", {href: par.ImgTh, target: "_blank"})
-				.html($("<img />", {src: par.ImgTh}))
+		row.append($("<td>").html(
+			$("<a>", {href: par.ImgTh, target: "_blank"})
+				.html($("<img >", {src: par.ImgTh}))
 				.css("text-align", "center")
 		));
-		row.append($("<td/>").html(
-			$("<a/>", {href: "javascript:void(0)"})
-				.html($("<img />", {src: par.ImgPrev}))
+		row.append($("<td>").html(
+			$("<a>", {href: "javascript:void(0)"})
+				.html($("<img >", {src: par.ImgPrev}))
 				.click(() => {this.openPreview(par)})
 				.css("text-align", "center")
 		));
-		row.append($("<td/>").html(parseInt(par.EquivDiam*1000000.0)));
-		row.append($("<td/>").html((par.Z*1000.0).toFixed(3)));
-		row.append($("<td/>").html(par.Circularity.toFixed(2)));
-		row.append($("<td/>").html(par.DynRange));
+		row.append($("<td>").html(parseInt(par.EquivDiam*1000000.0)));
+		row.append($("<td>").html((par.Z*1000.0).toFixed(3)));
+		row.append($("<td>").html(par.Circularity.toFixed(2)));
+		row.append($("<td>").html(par.DynRange));
 		return row;
 	}
 	
@@ -140,4 +140,4 @@ class ParticleViewer {
 			$("#div-viewer").show();
 		});
 	}
-};
+}

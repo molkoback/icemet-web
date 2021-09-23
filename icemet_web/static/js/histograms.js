@@ -6,7 +6,8 @@ class ParticleHistograms {
 		this.filt = $("#input-filter").val();
 		
 		this.maxTicksLimit = 20;
-		this.barColor = "rgba(0, 138, 254, 1.0)";
+		this.zColor = "rgba(164, 17, 232, 1.0)";
+		this.diamColor = "rgba(232, 83, 17, 1.0)";
 		this.gridColor = "rgba(204, 204, 204, 1.0)";
 		this.type = "linear"
 		
@@ -36,7 +37,7 @@ class ParticleHistograms {
 		});
 		
 		this.update();
-	};
+	}
 	
 	updateHistograms() {
 		if (this.chartDiam)
@@ -49,25 +50,29 @@ class ParticleHistograms {
 			data: {
 				labels: this.data.hist.diam.bins.map(x => parseInt(Math.round(x*1000000))),
 				datasets: [{
+					yAxisID: "y",
 					data: this.data.hist.diam.N,
-					backgroundColor: new Array(this.data.hist.diam.N.length).fill(this.barColor)
+					backgroundColor: new Array(this.data.hist.diam.N.length).fill(this.diamColor)
 				}]
 			},
 			options: {
-				title: {display: true, text: "Particle Size Distribution"},
-				legend: {display: false},
+				plugins: {
+					title: {display: true, text: "Particle Size Distribution"},
+					legend: {display: false}
+				},
 				scales: {
-					yAxes: [{
-						scaleLabel: {display: true, labelString: "Particles"},
+					y: {
+						title: {display: true, text: "No. particles"},
 						type: this.type,
 						gridLines: {color: this.gridColor}
-					}],
-					xAxes: [{
-						scaleLabel: {display: true, labelString: "Equivalent Diameter (μm)"},
+					},
+					x: {
+						title: {display: true, text: "Equivalent Diameter (μm)"},
 						ticks: {autoSkip: true, maxTicksLimit: this.maxTicksLimit},
 						gridLines: {color: this.gridColor}
-					}]
-				}
+					}
+				},
+				animation: false
 			}
 		});
 		
@@ -76,28 +81,32 @@ class ParticleHistograms {
 			data: {
 				labels: this.data.hist.z.bins.map(x => (x*1000).toFixed(1)),
 				datasets: [{
+					yAxisID: "y",
 					data: this.data.hist.z.N,
-					backgroundColor: new Array(this.data.hist.z.N.length).fill(this.barColor)
+					backgroundColor: new Array(this.data.hist.z.N.length).fill(this.zColor)
 				}]
 			},
 			options: {
-				title: {display: true, text: "Particle Z-Positions"},
-				legend: {display: false},
+				plugins: {
+					title: {display: true, text: "Particle Z-Positions"},
+					legend: {display: false}
+				},
 				scales: {
-					yAxes: [{
-						scaleLabel: {display: true, labelString: "Particles"},
+					y: {
+						title: {display: true, text: "No. particles"},
 						type: this.type,
 						gridLines: {color: this.gridColor}
-					}],
-					xAxes: [{
-						scaleLabel: {display: true, labelString: "Position (mm)"},
+					},
+					x: {
+						title: {display: true, text: "Particle Z-Position (mm)"},
 						ticks: {autoSkip: true, maxTicksLimit: this.maxTicksLimit},
 						gridLines: {color: this.gridColor}
-					}]
-				}
+					}
+				},
+				animation: false
 			}
 		});
-	};
+	}
 	
 	update() {
 		$("#div-histograms").hide();
@@ -109,4 +118,4 @@ class ParticleHistograms {
 			$("#div-histograms").show();
 		});
 	}
-};
+}

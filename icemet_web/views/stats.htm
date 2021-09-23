@@ -8,14 +8,17 @@
 {% endblock %}
 
 {% block scripts %}
+<script src="{{ url_for('static', filename='js/chart.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/moment.min.js') }}"></script>
-<script src="{{ url_for('static', filename='js/Chart.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/chartjs-adapter-moment.js') }}"></script>
 <script src="{{ url_for('static', filename='js/daterangepicker.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/datetimepicker.js') }}"></script>
 <script src="{{ url_for('static', filename='js/stats.js') }}"></script>
 <script>
-$(window).on("load", () => {
-	const stats = new StatsChart(api);
-});
+	$(window).on("load", () => {
+		const picker = new DateTimePicker();
+		const stats = new StatsChart(api, picker);
+	});
 </script>
 {% endblock %}
 
