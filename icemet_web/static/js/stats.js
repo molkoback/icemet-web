@@ -40,7 +40,8 @@ class StatsCharts {
 				unit: "hour",
 				displayFormats: {
 					hour: "hh:mm"
-				}
+				},
+				tooltipFormat: "YYYY-MM-DD HH:mm"
 			},
 			ticks: {autoSkip: true, maxTicksLimit: 20},
 			gridLines: {color: gridColor}
