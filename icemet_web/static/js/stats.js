@@ -39,7 +39,7 @@ class StatsCharts {
 			time: {
 				unit: "hour",
 				displayFormats: {
-					hour: "hh:mm"
+					hour: "HH:mm"
 				},
 				tooltipFormat: "YYYY-MM-DD HH:mm"
 			},
