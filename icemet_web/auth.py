@@ -22,6 +22,8 @@ class ICEMETAuth(BasicAuth):
 					return self.challenge()
 	
 	def check_credentials(self, username, password):
+		if username in app.config.get("SQL_DISABLED_USERS", []):
+			return False
 		flask.session["SQL_USERNAME"] = username
 		flask.session["SQL_PASSWORD"] = password
 		return not database_inst() is None

@@ -6,6 +6,7 @@ SECRET_KEY: ""
 SQL_HOST: "localhost"
 SQL_PORT: 3306
 SQL_WEBSITE: "https://localhost/phpmyadmin"
+SQL_DISABLED_USERS: ["root"]
 
 ICEMET_WATCH_PATH: "~/.icemet/watch"
 ICEMET_RESULTS_PATH: "~/.icemet/results"
