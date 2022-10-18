@@ -10,6 +10,7 @@ SQL_DISABLED_USERS: ["root"]
 
 ICEMET_WATCH_PATH: "~/.icemet/watch"
 ICEMET_RESULTS_PATH: "~/.icemet/results"
+ICEMET_PLUGINS_PATH: "~/.icemet/plugins"
 ICEMET_STATUS_FILE: ":memory:"
 ICEMET_PARTICLES_FILTERS: {
 "default": ""

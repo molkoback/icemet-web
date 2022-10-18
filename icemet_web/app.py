@@ -12,3 +12,5 @@ import icemet_web.controllers.histograms
 import icemet_web.controllers.stats
 import icemet_web.controllers.status
 import icemet_web.controllers.upload
+
+import icemet_web.plugins

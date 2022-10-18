@@ -5,8 +5,6 @@ import flask
 import sqlite3
 import time
 
-__status_delta__ = 15 * 60
-
 class Status:
 	def __init__(self, type, id, location, time_):
 		self.type = str(type)
@@ -14,11 +12,15 @@ class Status:
 		self.location = str(location)
 		self.time = int(time_)
 	
+	@property
+	def name(self):
+		return f'{self.type}-{self.id:02X}'
+	
 	def delta(self):
 		return int(time.time()) - self.time
 	
 	def status(self):
-		return self.delta() < __status_delta__
+		return self.delta() < app.config.get("ICEMET_STATUS_TIMEOUT", 15*60)
 
 class StatusContainer:
 	def __init__(self, file):
