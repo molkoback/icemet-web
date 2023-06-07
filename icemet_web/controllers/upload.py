@@ -27,7 +27,7 @@ def upload_api_route(path):
 			return api(error="Invalid path")
 		
 		files["file"].save(tmp)
-		os.rename(tmp, dst)
+		os.replace(tmp, dst)
 	except Exception as e:
 		return api(error="Invalid file")
 	return api()
