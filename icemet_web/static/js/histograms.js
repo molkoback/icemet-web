@@ -30,8 +30,7 @@ class ParticleHistograms {
 				this.update();
 			}
 		});
-		
-		this.update();
+		$("#loading").hide();
 	}
 	
 	updateHistograms(data) {
@@ -108,6 +107,7 @@ class ParticleHistograms {
 	}
 	
 	update() {
+		$("#div-nodata").hide();
 		$("#div-histograms").hide();
 		$("#loading").show();
 		this.api.request("/hist", {filt: this.filt}, (data) => {
