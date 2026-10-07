@@ -2,8 +2,10 @@ from icemet_web import homedir
 from icemet_web.app import app
 
 import atexit
+import importlib.util
 import os
 import pkgutil
+import sys
 from threading import Event, Thread
 
 plugins = []
@@ -24,14 +26,19 @@ class ThreadRunner:
 		self._stop.set()
 		self._thread.join()
 
-for loader, name, ispkg in pkgutil.iter_modules([app.config.get("ICEMET_PLUGINS_PATH", os.path.join(homedir, "plugins"))]):
-	plugin = loader.find_module(name).load_module(name)
+plugins_path = app.config.get("ICEMET_PLUGINS_PATH", os.path.join(homedir, "plugins"))
+for finder, name, ispkg in pkgutil.iter_modules([plugins_path]):
+	spec = finder.find_spec(name)
+	plugin = importlib.util.module_from_spec(spec)
+	sys.modules[name] = plugin
+	spec.loader.exec_module(plugin)
 	plugins.append(plugin)
 
 def call_hook(name, *args, **kwargs):
 	for plugin in plugins:
-		if name in dir(plugin):
-			getattr(plugin, name)(*args, **kwargs)
+		hook = getattr(plugin, name, None)
+		if callable(hook):
+			hook(*args, **kwargs)
 
 call_hook("init")
-atexit.register(lambda : call_hook("close"))
+atexit.register(call_hook, "close")
